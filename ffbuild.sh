@@ -515,14 +515,15 @@ find "$RELEASE/lib/$PYVER" -name "__pycache__" | xargs rm -rfv
 
 log_status "Python get_path() result..."
 /$MINGVER/bin/python.exe -c "import sysconfig as sc; print(sc.get_path('platlib', sc.get_preferred_scheme('user'), vars={'userbase': '$TARGET'}))"
+PY_DLLS_SRC_PATH=`/$MINGVER/bin/python.exe -c "import sysconfig as sc; print(sc.get_path('platlib', sc.get_preferred_scheme('user'), vars={'userbase': '$TARGET'}))"`
 
 log_status "Python extension dlls locations"
 echo "$TARGET/lib/$PYVER/site-packages/fontforge.pyd"
 echo "$RELEASE/lib/$PYVER/site-packages/"
 
 log_status "Copying the Python extension dlls..."
-cp -f "$TARGET/lib/$PYVER/site-packages/fontforge.pyd" "$RELEASE/lib/$PYVER/site-packages/" || bail "Couldn't copy pyhook dlls"
-cp -f "$TARGET/lib/$PYVER/site-packages/psMat.pyd" "$RELEASE/lib/$PYVER/site-packages/" || bail "Couldn't copy pyhook dlls"
+cp -f "$PY_DLLS_SRC_PATH/fontforge.pyd" "$RELEASE/lib/$PYVER/site-packages/" || bail "Couldn't copy pyhook dlls"
+cp -f "$PY_DLLS_SRC_PATH/psMat.pyd" "$RELEASE/lib/$PYVER/site-packages/" || bail "Couldn't copy pyhook dlls"
 
 ffex=`which fontforge.exe`
 MSYSROOT=`cygpath -w /`
