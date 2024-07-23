@@ -216,7 +216,7 @@ fi
 mkdir -p "$WORK"
 mkdir -p "$RELEASE/bin"
 mkdir -p "$RELEASE/lib"
-mkdir -p "$RELEASE/share"
+mkdir -p "$RELEASE/share/icons"
 mkdir -p "$DBSYMBOLS"
 
 # Set pkg-config path to also search mingw libs
@@ -509,6 +509,7 @@ else
 fi
 
 ls -lR /$MINGVER/share/icons
+cp -r /$MINGVER/share/icons/AdwaitaLegacy "$RELEASE/share/icons" ||  bail "Couldn't copy icons"
 
 cd $WORK
 
