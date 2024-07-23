@@ -507,6 +507,9 @@ else
     log_status "Copying tcl/tk..."
     cp -r /$MINGVER/lib/{tcl,tk}8.* "$RELEASE/lib/" ||  bail "Couldn't copy tcl/tk"
 fi
+
+ls -lR /$MINGVER/share/icons
+
 cd $WORK
 
 log_status "Stripping Python cache files (*.pyc,*.pyo,__pycache__)..."
