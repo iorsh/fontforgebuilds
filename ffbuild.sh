@@ -509,6 +509,7 @@ else
 fi
 
 ls -lR /$MINGVER/lib/gdk-pixbuf-2.0
+cp -r /$MINGVER/lib/gdk-pixbuf-2.0 "$RELEASE/lib" ||  bail "Couldn't copy pixbuf loaders"
 # ls -lR /$MINGVER/share/icons
 cp -r /$MINGVER/share/icons "$RELEASE/share" ||  bail "Couldn't copy icons"
 # ls -lR /$MINGVER/share/glib-2.0/schemas
