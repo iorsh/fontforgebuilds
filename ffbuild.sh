@@ -92,6 +92,8 @@ function get_archive() {
 # Preamble
 log_note "MSYS2 FontForge build script..."
 
+export
+
 # Retrieve input arguments to script
 optspec=":hrnydalg-:"
 while getopts "$optspec" optchar; do
