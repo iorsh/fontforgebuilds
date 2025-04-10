@@ -374,7 +374,7 @@ if (( ! $nomake )); then
             fi
 
             mkdir -p build && cd build
-            time cmake -GNinja \
+            time cmake -G "NMake Makefiles" \
                 -DCMAKE_INSTALL_PREFIX="$TARGET" \
                 -DENABLE_FREETYPE_DEBUGGER="$WORK/$FREETYPE_NAME" \
                 -DENABLE_LIBREADLINE=no \
@@ -387,15 +387,15 @@ if (( ! $nomake )); then
         fi
         
         log_status "Compiling FontForge..."
-        time ninja -C build || bail "FontForge build"
+        time nmake -C build || bail "FontForge build"
 
         if (($appveyor+$ghactions)); then
             log_status "Running the test suite..."
-            CTEST_PARALLEL_LEVEL=100 ninja -C build check || bail "FontForge check"
+            CTEST_PARALLEL_LEVEL=100 nmake -C build check || bail "FontForge check"
         fi
 
         log_status "Installing FontForge..."
-        ninja -C build install || bail "FontForge install"
+        nmake -C build install || bail "FontForge install"
     else
         if [ ! -f fontforge.configure-complete ] || (($reconfigure)); then
             log_status "Running the configure script..."
