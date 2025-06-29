@@ -202,7 +202,7 @@ fi
 mkdir -p "$WORK"
 mkdir -p "$RELEASE/bin"
 mkdir -p "$RELEASE/lib"
-mkdir -p "$RELEASE/share"
+mkdir -p "$RELEASE/share/glib-2.0"
 mkdir -p "$DBSYMBOLS"
 
 # Set pkg-config path to also search mingw libs
@@ -266,7 +266,7 @@ if (( ! $nomake )) && [ ! -f $PMTEST ]; then
     if (($qt)); then
         pacman $IOPTS $PMPREFIX-{qt6,qt6-tools}
     else
-        pacman $IOPTS $PMPREFIX-gtk3
+        pacman $IOPTS $PMPREFIX-{gtk3,gtkmm3}
     fi
 
     touch $PMTEST
@@ -482,6 +482,21 @@ else
     log_status "Copying tcl/tk..."
     cp -r /$MINGVER/lib/{tcl,tk}8.* "$RELEASE/lib/" ||  bail "Couldn't copy tcl/tk"
 fi
+
+if [ -d "$RELEASE/lib/gdk-pixbuf-2.0" ]; then
+    log_note "Skipping copying gdk-pixbuf folder because it already exists"
+else
+    log_status "Copying gdk-pixbuf..."
+    cp -r /$MINGVER/lib/gdk-pixbuf-2.0 "$RELEASE/lib/" ||  bail "Couldn't copy gdk-pixbuf"
+fi
+
+if [ -d "$RELEASE/share/glib-2.0/schemas" ]; then
+    log_note "Skipping copying schemas folder because it already exists"
+else
+    log_status "Copying schemas..."
+    cp -r /$MINGVER/share/glib-2.0/schemas "$RELEASE/share/glib-2.0/" ||  bail "Couldn't copy schemas"
+fi
+
 cd $WORK
 
 log_status "Stripping Python cache files (*.pyc,*.pyo,__pycache__)..."
@@ -502,7 +517,7 @@ log_note "The executable: $ffex"
 log_note "MSYS root: $MSYSROOT"
 log_note "FFEX root: $FFEXROOT"
 
-fflibs=`ntldd -D "$(dirname \"${ffex}\")" -R "$ffex" $RELEASE/lib/$PYVER/lib-dynload/*.dll $RELEASE/bin/potrace.exe \
+fflibs=`ntldd -D "$(dirname \"${ffex}\")" -R "$ffex" $RELEASE/lib/$PYVER/lib-dynload/*.dll $RELEASE/lib/gdk-pixbuf-2.0/*/loaders/*.dll $RELEASE/bin/potrace.exe \
 | grep =.*dll \
 | sed -e '/^[^\t]/ d'  \
 | sed -e 's/\t//'  \
